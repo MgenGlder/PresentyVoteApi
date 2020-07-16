@@ -2,6 +2,7 @@ var express = require('express');
 const firebase = require('firebase');
 const { compileClientWithDependenciesTracked } = require('jade');
 var router = express.Router();
+let clients = [];
 
 const firebaseConfig = {
   apiKey: 'healthcheck-7ec75.firebaseapp.com',
@@ -30,6 +31,25 @@ router.get('/get', async function(req, res, next) {
   return;
 });
 
+router.get('/reminder', async function(req, res, next) {
+  for (let x = 5; x > 0; x --) {
+    await new Promise(resolve => {
+      setTimeout(() => {
+        clients.forEach(c => c.res.write(`data: test reminder ${x}\n\n`));
+        resolve();
+    }, 1000)});
+  }
+  // [3, 2, 1].forEach(async function (countItem) {
+  //   await new Promise(resolve => {
+  //     setTimeout(() => {
+  //       clients.forEach(c => c.res.write(`data: test reminder ${countItem}\n\n`));
+  //       resolve();
+  //   }, 1000)});
+  // })
+  // clients.forEach(c => c.res.write(`data: test reminder\n\n`));
+  res.json({successful: 'true', count: clients.length});
+});
+
 router.get('/events', async function(req, res, next) {
   res.set({
     'Cache-Control': 'no-cache',
@@ -37,14 +57,20 @@ router.get('/events', async function(req, res, next) {
     'Connection': 'keep-alive'
   });
   res.flushHeaders();
-  let count = 0;
   res.write('retry: 10000\n\n');
+  let clientId = Date.now();
+  clients.push({ id: clientId, res});
 
-  while(true) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    res.write(`data: ${count}\n\n`);
+  // while(true) {
+  //   await new Promise(resolve => setTimeout(resolve, 1000));
+  //   res.write(`data: ${count}\n\n`);
 
-    count ++;
-  }
+  //   count ++;
+  // }
+
+  req.on('close', () => {
+    console.log(`${clientId} Connection Closed`);
+    clients = clients.filter(c => c.id !== clientId);
+  });
 });
 module.exports = router;

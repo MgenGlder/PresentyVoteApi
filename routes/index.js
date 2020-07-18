@@ -5,9 +5,9 @@ var router = express.Router();
 let clients = [];
 
 const firebaseConfig = {
-  apiKey: 'healthcheck-7ec75.firebaseapp.com',
-  authDoamin: 'AIzaSyBMPMFL1g6Vgs1l5LPiwhpHY-nXxw82InM',
-  projectId: 'healthcheck-7ec75'
+  apiKey: '<api-key>',
+  authDoamin: '<auth-domain>',
+  projectId: '<project-id>'
 }
 
 firebase.initializeApp(firebaseConfig);

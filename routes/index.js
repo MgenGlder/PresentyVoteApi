@@ -39,14 +39,6 @@ router.get('/reminder', async function(req, res, next) {
         resolve();
     }, 1000)});
   }
-  // [3, 2, 1].forEach(async function (countItem) {
-  //   await new Promise(resolve => {
-  //     setTimeout(() => {
-  //       clients.forEach(c => c.res.write(`data: test reminder ${countItem}\n\n`));
-  //       resolve();
-  //   }, 1000)});
-  // })
-  // clients.forEach(c => c.res.write(`data: test reminder\n\n`));
   res.json({successful: 'true', count: clients.length});
 });
 

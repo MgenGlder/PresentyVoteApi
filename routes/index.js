@@ -5,9 +5,9 @@ var router = express.Router();
 let clients = [];
 
 const firebaseConfig = {
-  apiKey: '<api-key>',
-  authDoamin: '<auth-domain>',
-  projectId: '<project-id>'
+  apiKey: process.env.apiKey,
+  authDoamin: process.env.authDomain,
+  projectId: process.env.projectId
 }
 
 firebase.initializeApp(firebaseConfig);
